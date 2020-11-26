@@ -41,5 +41,34 @@ router.get('/token/:userCode', async function(req, res, next) {
     }
 });
 
+/*Get Athlete Stats*/
+router.get('/stats/:athleteId', async function(req, res, next) {
+    const athleteId = req.params.athleteId;
+    console.log('Retrieving athlete stats for for tokens for athlete: ', athleteId);
+    const auth = req.headers.authorization;
+    try{
+        fetch("https://www.strava.com/api/v3/athletes/" + athleteId + "/stats" 
+        ,{
+        "method": "GET",
+        "credentials": "include",
+        "headers": {
+            'Connection': 'close',
+            'Accept': 'application/json',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/json',
+            'Authorization': auth
+        },
+    }
+    ).then(response => response.json())
+    .then(response => {
+        console.log(response);
+        res.send(response);
+    })
+}
+    catch(error){
+        console.log(error);
+    }
+});
+
 
 module.exports = router;
